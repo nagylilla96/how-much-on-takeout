@@ -1,62 +1,49 @@
-import requests
-import re
-
-BASE_URL = "https://api.glovoapp.com/v3/customer/orders-list?offset={0}&limit=100"
-AUTH_TOKEN = ""
-
-if not AUTH_TOKEN:
-    raise ValueError("Authorization token is missing. Please set 'AUTH_TOKEN'")
-
-headers = {
-    "Authorization": f"Bearer {AUTH_TOKEN}"
-}
-
-offset = 0
-total_sum = 0.0
-order_count = 0
-
-def process_orders(orders):
-    global total_sum, order_count
-    for order in orders:
-        footer_left_data = order["footer"]["left"]["data"]
-        
-        amount = re.search(r"([\d,]+)\sRON", footer_left_data)
-        if amount:
-            numeric_value = float(amount.group(1).replace(",", "."))
-            total_sum += numeric_value
-            order_count += 1
-
-def fetch_orders():
-    global offset
-
-    while True:
-        url = BASE_URL.format(offset)
-        response = requests.get(url, headers=headers)
-
-        if response.status_code != 200:
-            print(f"Failed to fetch data. Status code: {response.status_code}")
-            break
-
-        data = response.json()
-
-        if "orders" in data:
-            process_orders(data["orders"])
-        else:
-            print("No 'orders' key found in response.")
-            break
-
-        next_page = data.get("pagination", {}).get("next")
-        if not next_page:
-            break
-        else:
-            offset = next_page.get("offset", offset)
+from merchants.glovo import fetch_glovo_orders
+from merchants.tazz import fetch_tazz_orders
+from merchants.presto import fetch_presto_orders
 
 def main():
-    fetch_orders()
-    average_order_value = total_sum / order_count if order_count > 0 else 0
-    print(f"Total sum: {total_sum:.2f} RON")
-    print(f"Total number of orders: {order_count}")
-    print(f"Average order value: {average_order_value:.2f} RON")
+    total_combined_sum = 0.0
+    total_combined_count = 0
+
+    # Fetch Glovo orders
+    glovo_total_sum, glovo_order_count = fetch_glovo_orders()
+    if glovo_order_count > 0:
+        average_order_value_glovo = glovo_total_sum / glovo_order_count
+        print(f"Total Glovo sum: {glovo_total_sum:.2f} RON")
+        print(f"Total Glovo orders: {glovo_order_count}")
+        print(f"Average Glovo order value: {average_order_value_glovo:.2f} RON\n")
+        total_combined_sum += glovo_total_sum
+        total_combined_count += glovo_order_count
+
+    # Fetch Tazz orders
+    tazz_total_sum, tazz_order_count = fetch_tazz_orders()
+    if tazz_order_count > 0:
+        average_order_value_tazz = tazz_total_sum / tazz_order_count
+        print(f"Total Tazz sum: {tazz_total_sum:.2f} Lei")
+        print(f"Total Tazz orders: {tazz_order_count}")
+        print(f"Average Tazz order value: {average_order_value_tazz:.2f} Lei\n")
+        total_combined_sum += tazz_total_sum
+        total_combined_count += tazz_order_count
+
+    # Fetch Presto orders
+    presto_total_sum, presto_order_count = fetch_presto_orders()
+    if presto_order_count > 0:
+        average_order_value_presto = presto_total_sum / presto_order_count
+        print(f"Total Presto sum: {presto_total_sum:.2f} RON")
+        print(f"Total Presto orders: {presto_order_count}")
+        print(f"Average Presto order value: {average_order_value_presto:.2f} RON\n")
+        total_combined_sum += presto_total_sum
+        total_combined_count += presto_order_count
+
+    # Combined totals
+    if total_combined_count > 0:
+        average_combined_value = total_combined_sum / total_combined_count
+        print(f"Combined Total Sum: {total_combined_sum:.2f} RON")
+        print(f"Combined Total Orders: {total_combined_count}")
+        print(f"Combined Average Order Value: {average_combined_value:.2f} RON")
+    else:
+        print("No orders data available to calculate combined totals.")
 
 if __name__ == "__main__":
     main()
