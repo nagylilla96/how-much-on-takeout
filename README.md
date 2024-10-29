@@ -52,6 +52,17 @@
 1. Paste the token into the `.env` file as `BOLT_AUTH_TOKEN`.
 1. Paste the device id into the `.env` file as `BOLT_DEVICE_ID`.
 
+## Jerry's Pizza
+- URL: `https://www.jerryspizza.ro/orders`
+1. Open Jerry's Pizza in your browser, login if necesary
+1. Open Developer Tools and go to the Network tab.
+1. Go to "Istoric Comenzi"
+1. Select any request with the following format `https://app.jerryspizza.ro/api2/index.php/order/all?id=...`
+1. From the `Authorization` header copy the Bearer token
+1. From the `X-Api-Key`  header copy the X-API-KEY
+1. Paste the token into the `.env` file as `JERRYS_AUTH_TOKEN`.
+1. Paste the key into the `.env` file as `JERRYS_X_API_KEY`.
+
 # Special Thanks
 - [nemesszili](https://github.com/nemesszili)
 - [sorin25](https://github.com/sorin25)
