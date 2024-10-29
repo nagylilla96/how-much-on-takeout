@@ -1,5 +1,5 @@
 import requests
-from config import BASE_URL_BOLT, BOLT_AUTH_TOKEN
+from config import BASE_URL_BOLT, BOLT_AUTH_TOKEN, BOLT_DEVICE_ID
 
 def fetch_bolt_food_orders():
     if not BOLT_AUTH_TOKEN:
@@ -20,7 +20,7 @@ def fetch_bolt_food_orders():
         "language": "ro-RO",
         "device_name": "web",
         "device_os_version": "web",
-        "deviceId": "3e206abc-e918-4519-9c6c-39a0e9870173",
+        "deviceId": BOLT_DEVICE_ID,
         "deviceType": "web"
     }
 
