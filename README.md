@@ -51,3 +51,7 @@
 1. Copy the Device Id parameter from the request.
 1. Paste the token into the `.env` file as `BOLT_AUTH_TOKEN`.
 1. Paste the device id into the `.env` file as `BOLT_DEVICE_ID`.
+
+# Special Thanks
+- [nemesszili](https://github.com/nemesszili)
+- [sorin25](https://github.com/sorin25)
