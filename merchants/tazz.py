@@ -1,6 +1,6 @@
 import requests
 import re
-from config import TAZZ_COOKIE
+from config import BASE_URL_TAZZ, TAZZ_COOKIE
 
 def extract_remember_me(cookie_str):
     match = re.search(r'remember_me=([^;]+)', cookie_str)
@@ -16,9 +16,8 @@ def fetch_tazz_orders():
     total_sum = 0.0
     order_count = 0
     headers = {"Authorization": TAZZ_TOKEN}
-    url = "https://tapi.tazz.ro/orders/my-orders/0/10"
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(BASE_URL_TAZZ, headers=headers)
 
     if response.status_code != 200:
         print(f"Failed to fetch Tazz data. Status code: {response.status_code}")
