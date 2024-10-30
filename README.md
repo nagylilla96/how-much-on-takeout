@@ -5,7 +5,7 @@
 1. Have Python 3 installed on your system
 1. Clone this repo
 1. Install a virtual environment with `python3 -m venv .venv/`
-1. Activate virtualenv with `source .venv/bin/activate`
+1. Activate virtualenv with `source .venv/bin/activate` on Linux or by running `.venv/Scripts/activate` on Windows
 1. Install dependencies with `python3 -m pip install -r requirements.txt`
 1. Run `cp .env.example .env`
 1. Add the necessary authorization tokens in the `.env` file
@@ -63,6 +63,17 @@
 1. From the `X-Api-Key`  header copy the X-API-KEY
 1. Paste the token into the `.env` file as `JERRYS_AUTH_TOKEN`.
 1. Paste the key into the `.env` file as `JERRYS_X_API_KEY`.
+
+## Big Belly
+- URL: `https://www.bigbelly-cluj.ro`
+1. Open Big Belly in your browser.
+1. Log in with your account
+1. Go to the Orders page.
+1. Open Developer Tools and go to the Network tab.
+1. Refresh the page.
+1. Select the `contul-meu-comenzi` request that will be present in the network tab's list (it should be the first one after the refresh), and locate the Cookie header in the request headers.
+1. Copy the entire Cookie header value.
+1. Paste this cookie value into the `.env` file as `BIG_BELLY_AUTH_TOKEN`.
 
 # Special Thanks
 - [nemesszili](https://github.com/nemesszili)
