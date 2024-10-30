@@ -1,18 +1,17 @@
 import requests
 import re
+# TODO: remove this, only added for testing
 import io
 from config import BASE_URL_BIG_BELLY, BIG_BELLY_AUTH_TOKEN
-
-def extract_remember_me(cookie_str):
-    match = re.search(r'remember_me=([^;]+)', cookie_str)
-    return match.group(1) if match else None
+try: 
+    from BeautifulSoup import BeautifulSoup
+except ImportError:
+    from bs4 import BeautifulSoup
 
 def fetch_big_belly_orders():
     if not BIG_BELLY_AUTH_TOKEN:
         print("BIG_BELLY_AUTH_TOKEN is missing.")
         return 0.0, 0
-
-    BIG_BELLY_TOKEN = extract_remember_me(BIG_BELLY_AUTH_TOKEN)
 
     total_sum = 0.0
     order_count = 0
@@ -26,21 +25,17 @@ def fetch_big_belly_orders():
         print(f"Failed to fetch Big Belly data. Status code: {response.status_code}")
         return total_sum, order_count
 
-    try:
-        data = response.json()
-        print(data)
-    except ValueError as e:
-        print(f"Failed to parse Big Belly response: {e}")
-        return total_sum, order_count
+    data = BeautifulSoup(response.text, 'html.parser')
+    order_items = data.body.find('div', attrs={'id':'OrderItems'})
 
-    if data.get("success") and data.get("data"):
-        orders = data["data"]["orders"]["items"]
-
-        for order in orders:
-            try:
-                total_sum += float(order["totalPrice"])
+    if order_items:
+        orders = order_items.text.split()
+        
+        index = 0
+        for item in orders:
+            index += 1
+            if "Total" in item:
+                total_sum += float(orders[index])
                 order_count += 1
-            except (ValueError, KeyError) as e:
-                print(f"Error parsing Big Belly order price: {e}")
 
     return total_sum, order_count
