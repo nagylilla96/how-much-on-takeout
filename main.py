@@ -3,6 +3,7 @@ from merchants.tazz import fetch_tazz_orders
 from merchants.presto import fetch_presto_orders
 from merchants.bolt_food import fetch_bolt_food_orders
 from merchants.jerrys import fetch_jerrys_orders
+from merchants.big_belly import fetch_big_belly_orders
 
 def main():
     total_combined_sum = 0.0
@@ -52,6 +53,15 @@ def main():
         print(f"Average Jerry's Pizza order value: {average_order_value_jerrys:.2f} RON\n")
         total_combined_sum += jerrys_total_sum
         total_combined_count += jerrys_order_count
+
+    big_belly_total_sum, big_belly_order_count = fetch_big_belly_orders()
+    if big_belly_order_count > 0:
+        average_order_value_big_belly = big_belly_total_sum / big_belly_order_count
+        print(f"Total Big Belly Food sum: {big_belly_total_sum:.2f} RON")
+        print(f"Total Big Belly orders: {big_belly_order_count}")
+        print(f"Average Big Belly order value: {average_order_value_big_belly:.2f} RON\n")
+        total_combined_sum += big_belly_total_sum
+        total_combined_count += big_belly_order_count
 
     if total_combined_count > 0:
         average_combined_value = total_combined_sum / total_combined_count
