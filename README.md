@@ -73,7 +73,7 @@
 1. Refresh the page.
 1. Select the `contul-meu-comenzi` request that will be present in the network tab's list (it should be the first one after the refresh), and locate the Cookie header in the request headers.
 1. Copy the entire Cookie header value.
-1. Paste this cookie value into the `.env` file as `BIG_BELLY_AUTH_TOKEN`.
+1. Paste this cookie value into the `.env` file as `BIG_BELLY_COOKIE`.
 
 # Special Thanks
 - [nemesszili](https://github.com/nemesszili)
